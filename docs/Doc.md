@@ -1,6 +1,6 @@
 # Infinite Mushrooms: Technical Documentation
 
-Last updated: commit 4 (accounts app).
+Last updated: farms models commit.
 
 ## 1. Overview
 
@@ -63,6 +63,7 @@ n8n is only a delivery pipe.
     apps/api/            Django project
       config/            settings.py, urls.py, wsgi.py, asgi.py
       accounts/          custom User model, admin, tests
+      farms/             farms, species, batches, stage timelines
       manage.py
       requirements.txt
       .env.example
@@ -118,9 +119,30 @@ anything that is not 10 to 15 digits after the `+` raises a `ValueError`.
 Tests: `python manage.py test accounts` (normalisation, validation, uniqueness,
 phone login, superuser flags).
 
+### farms
+
+| Model | Purpose | Key fields |
+| --- | --- | --- |
+| Farm | A farm run by an owner | name, owner (User), location |
+| Species | Mushroom species | name (Oyster and Reishi are seeded) |
+| StageTemplate | One stage in a species' cycle | species, order, name, duration_days, conditions, alert_before_days, overdue_after_days |
+| Batch | One growing batch | farm, species, name, start_date, quantity, status |
+| BatchStage | Dated stage on a batch's timeline | batch, template, order, name, starts_on, due_on, completed_on |
+
+Constraints: stage order is unique per species and per batch; batch name is unique per farm.
+
+Timelines: `farms.services.generate_stages(batch)` copies the species' stage templates
+into dated `BatchStage` rows. Stage 1 starts on the batch start date and each stage starts
+when the previous one is due. It raises `NoStageTemplates` if the species has none, and
+`ValueError` if the batch already has a timeline. The admin calls it when a batch is created.
+
+Stage templates are NOT seeded. Durations and conditions must come from the client farmer.
+
+Tests: `python manage.py test farms`.
+
 ### Planned models
 
-`Farm`, `Species`, `StageTemplate`, `Batch`, `BatchStage`, `HarvestRecord`,
+`HarvestRecord`,
 `StockItem`, `Sale`, `SaleItem`, `Payment`, `Notification`, `NotificationPreference`.
 
 Stage templates are configurable per species (oyster, reishi): stage names,
@@ -146,6 +168,8 @@ More endpoints are added with each phase.
 | Phone number as login | Farmers use phones, not emails |
 | Venv and local Postgres, no Docker yet | Fewer moving parts early on |
 | React + TypeScript frontend | Type safety across the API boundary |
+| Timelines built in a service, not signals | Explicit, testable, easy to call from the API later |
+| Stage durations not seeded | They must come from the client farmer |
 
 ## 9. Phases
 
@@ -199,3 +223,4 @@ pull, install dependencies, migrate, collectstatic and a service restart. Start 
 | 3 | docs: full README and technical documentation | Full README and Doc.md |
 | 4 | feat(accounts): custom phone-number User with owner/staff roles | User model, admin, tests |
 | 5 | ci: run.sh and GitHub Actions pipeline | run.sh, .github/workflows/ci.yml, docs/CHECKLIST.md |
+| 6 | feat(farms): farms, species, stage templates, batches and stage timelines | Models, service, admin, tests |

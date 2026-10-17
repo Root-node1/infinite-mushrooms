@@ -37,6 +37,7 @@ n8n delivers it through the right channel and reports back.
     │   ├── api/        Django + DRF backend
     │   │   ├── config/     project settings and root URLs
     │   │   ├── accounts/   custom phone-number User
+    │   │   ├── farms/      farms, species, stage templates, batches
     │   │   └── manage.py
     │   └── web/        React + TypeScript frontend (not started)
     ├── infra/          deployment and n8n config (not started)
@@ -110,7 +111,7 @@ Phase 1 (MVP): batch tracking and stage alerts. In progress.
 - [x] Monorepo scaffold
 - [x] Django + DRF project with PostgreSQL
 - [x] Custom phone-number User with roles
-- [ ] Farms, species and stage templates, batches
+- [x] Farms, species, stage templates, batches and stage timelines
 - [ ] Stage alert job and n8n webhook
 - [ ] React + TypeScript frontend
 - [ ] POS, harvest and stock (Phase 2)

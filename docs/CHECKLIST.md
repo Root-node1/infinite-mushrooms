@@ -32,8 +32,8 @@ Live counts: run `./run.sh progress`
 | --- | --- | --- |
 | ✓ | Django + DRF + PostgreSQL project with health endpoint | |
 | ✓ | accounts: custom phone-number User, owner and staff roles, phone login backend | |
-| ✗ | farms: Farm, Species, StageTemplate, Batch, BatchStage models | |
-| ✗ | Stage timeline service (generate dated stages from templates) | |
+| ✓ | farms: Farm, Species, StageTemplate, Batch, BatchStage models | |
+| ✓ | Stage timeline service (generate dated stages from templates) | |
 | ✗ | DRF endpoints: farms, batches, stages | |
 | ✗ | Login endpoint with token auth | |
 | ✗ | Daily alert job: due and overdue stages | |
