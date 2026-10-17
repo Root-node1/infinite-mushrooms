@@ -80,6 +80,23 @@ Requires Python 3.10+ and PostgreSQL (WSL/Ubuntu or Linux).
 
 Run the tests with `python manage.py test`.
 
+## Commands (run.sh)
+
+One script wraps the common tasks. Run `./run.sh help` for the list.
+
+    ./run.sh setup      # venv, dependencies, .env
+    ./run.sh db         # start Postgres, create dev user and database
+    ./run.sh migrate
+    ./run.sh api        # dev server on :8000
+    ./run.sh ci         # exactly what CI runs: check + migration check + tests
+    ./run.sh progress   # checklist counts
+
+## CI
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request and every push to
+`main`: Django check, missing-migration check and the full test suite against a Postgres 16
+service container. Run `./run.sh ci` locally before pushing.
+
 ## Authentication
 
 Users log in with a phone number, not a username. Numbers are stored in
@@ -100,6 +117,7 @@ Phase 1 (MVP): batch tracking and stage alerts. In progress.
 - [ ] WhatsApp alerts and sensors (Phases 3 and 4)
 
 Full details are in [docs/Doc.md](docs/Doc.md).
+Role-by-role MVP checklist: [docs/CHECKLIST.md](docs/CHECKLIST.md).
 
 ## Conventions
 

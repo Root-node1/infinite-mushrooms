@@ -162,7 +162,35 @@ More endpoints are added with each phase.
 - Kenyan SMS sender IDs are limited to 11 characters and approval can take weeks.
 - Backups for the production database must exist before real farmer data goes in.
 
-## 11. Commit log
+## 11. run.sh, CI and CD
+
+### run.sh
+
+Repo-root script for local tasks: `setup`, `db`, `migrate`, `api`, `web`, `test`, `check`,
+`ci`, `progress`. It uses `apps/api/.venv` directly, so no manual activation is needed.
+
+### CI (GitHub Actions)
+
+File: `.github/workflows/ci.yml`. Triggers: pull requests and pushes to `main`.
+Job `api` runs on Python 3.12 with a Postgres 16 service container and executes:
+`manage.py check`, `makemigrations --check --dry-run`, `manage.py test`.
+CI uses throwaway credentials set in the workflow, never the real `.env`.
+Add a `web` job (lint, typecheck, test, build) when `apps/web` is scaffolded.
+
+### Branch protection (manual, in GitHub)
+
+Settings, Branches, rule for `main`: require a pull request and require the `api` status
+check to pass before merging.
+
+### CD (planned, not built)
+
+Blocked on the VPS: needs a non-root deploy user, SSH key auth, a systemd service for the
+app server (gunicorn) behind nginx and Cloudflare, and GitHub secrets for host, user and key.
+Plan: a `deploy.yml` workflow that runs after CI passes on `main`, SSHes to the VPS and runs
+pull, install dependencies, migrate, collectstatic and a service restart. Start it as manual
+(`workflow_dispatch`) before making it automatic.
+
+## 12. Commit log
 
 | # | Commit | Summary |
 | --- | --- | --- |
@@ -170,3 +198,4 @@ More endpoints are added with each phase.
 | 2 | feat(api): Django + DRF project with local Postgres and venv | Settings, health endpoint |
 | 3 | docs: full README and technical documentation | Full README and Doc.md |
 | 4 | feat(accounts): custom phone-number User with owner/staff roles | User model, admin, tests |
+| 5 | ci: run.sh and GitHub Actions pipeline | run.sh, .github/workflows/ci.yml, docs/CHECKLIST.md |
