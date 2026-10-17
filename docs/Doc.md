@@ -1,6 +1,6 @@
 # Infinite Mushrooms: Technical Documentation
 
-Last updated: commit 3 (accounts app).
+Last updated: commit 4 (accounts app).
 
 ## 1. Overview
 
@@ -168,5 +168,5 @@ More endpoints are added with each phase.
 | --- | --- | --- |
 | 1 | chore: scaffold infinite-mushrooms monorepo | Folders, README, .gitignore |
 | 2 | feat(api): Django + DRF project with local Postgres and venv | Settings, health endpoint |
-| 3 | feat(accounts): custom phone-number User with owner/staff roles | User model, admin, tests |
-| 4 | docs: full README and technical documentation | This commit |
+| 3 | docs: full README and technical documentation | Full README and Doc.md |
+| 4 | feat(accounts): custom phone-number User with owner/staff roles | User model, admin, tests |
