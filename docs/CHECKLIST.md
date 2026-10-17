@@ -16,7 +16,7 @@ Live counts: run `./run.sh progress`
 | --- | --- | --- |
 | ✓ | Monorepo scaffold (apps, infra, docs, .gitignore) | |
 | ✓ | run.sh dev runner (setup, db, api, test, ci, progress) | |
-| ✗ | GitHub Actions CI green: Postgres service, Django tests on every PR | |
+| ✓ | GitHub Actions CI green: Postgres service, Django tests on every PR | |
 | ✗ | Branch protection on main: PR required, CI must pass | |
 | ✗ | Kanban board with columns, WIP limits and definition of done | |
 | ✗ | Cloudflare DNS: app, api and n8n subdomains on zindika.app | |
@@ -69,7 +69,7 @@ Live counts: run `./run.sh progress`
 | ✓ | README and docs/Doc.md written | Documentation updated with every commit |
 | ✓ | Phone login backend (accepts 0712..., 254712..., +254712...) | Admin login failed with local number format |
 | ✓ | run.sh dev runner | One command per task for every dev |
-| ✗ | GitHub Actions CI | Green or red signal before anything merges |
+| ✓ | GitHub Actions CI | Green or red signal before anything merges |
 | ✗ | Three role docs: DevOps, frontend, server devs | Frontend designer does not touch the server |
 | ✗ | Kanban board with WIP limits | Team process for all teams |
 
