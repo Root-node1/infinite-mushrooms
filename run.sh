@@ -29,7 +29,7 @@ Usage: ./run.sh <command>
   web        run the React dev server (once apps/web is scaffolded)
   test       run the backend tests (extra args are passed through)
   check      Django system check and "migrations missing" check
-  ci         run exactly what CI runs: check + test
+  ci         run exactly what CI runs: Django check + tests, web lint + build
   progress   show checklist counts from docs/CHECKLIST.md
 USAGE
 }
@@ -43,6 +43,9 @@ cmd_setup() {
     secret="$(python3 -c 'import secrets; print(secrets.token_urlsafe(50))')"
     sed -i "s|^DJANGO_SECRET_KEY=.*|DJANGO_SECRET_KEY=$secret|" "$API/.env"
     echo "created apps/api/.env"
+  fi
+  if [ -f "$WEB/package.json" ]; then
+    (cd "$WEB" && npm install)
   fi
   echo "setup done. Next: ./run.sh db && ./run.sh migrate"
 }
@@ -64,6 +67,11 @@ cmd_check() {
 cmd_web() {
   [ -f "$WEB/package.json" ] || die "apps/web is not scaffolded yet"
   (cd "$WEB" && npm run dev)
+}
+
+cmd_web_ci() {
+  [ -f "$WEB/package.json" ] || return 0
+  (cd "$WEB" && { [ -d node_modules ] || npm ci; } && npm run lint && npm run build)
 }
 
 cmd_progress() {
@@ -93,7 +101,7 @@ case "${1:-help}" in
   web)      cmd_web ;;
   test)     shift; manage test "$@" ;;
   check)    cmd_check ;;
-  ci)       cmd_check; manage test ;;
+  ci)       cmd_check; manage test; cmd_web_ci ;;
   progress) cmd_progress ;;
   help|-h|--help) usage ;;
   *)        usage; exit 1 ;;

@@ -18,7 +18,7 @@ Claude Doc "Mushroom Farm Manager: Reishi and Oyster". This file covers the code
 
 | Layer | Technology | Notes |
 | --- | --- | --- |
-| Frontend | React + TypeScript (Vite) | PWA, offline-tolerant. Not started. |
+| Frontend | React + TypeScript (Vite) | PWA, offline-tolerant. Scaffolded, health check page only. |
 | Backend | Django 5.2, Django REST Framework 3.16 | Single source of truth |
 | Database | PostgreSQL | psycopg 3 driver |
 | Config | python-dotenv | Reads `apps/api/.env` |
@@ -66,7 +66,7 @@ n8n is only a delivery pipe.
       manage.py
       requirements.txt
       .env.example
-    apps/web/            React + TypeScript (not started)
+    apps/web/            React + TypeScript (Vite)
     infra/               deployment and n8n config (not started)
     docs/                this file
 
@@ -159,10 +159,20 @@ More endpoints are added with each phase.
 - Login endpoint must normalise the phone before calling `authenticate`, since
   `authenticate(phone=...)` expects E.164.
 - WhatsApp needs Meta business verification, start it early.
+- Dev uses the Vite proxy, so CORS is not needed locally. In production the web app
+  (app.zindika.app) and API (api.zindika.app) are different origins: add
+  `django-cors-headers` or serve both behind one domain before deploying.
 - Kenyan SMS sender IDs are limited to 11 characters and approval can take weeks.
 - Backups for the production database must exist before real farmer data goes in.
 
-## 11. run.sh, CI and CD
+## 11. Frontend (apps/web)
+
+React + TypeScript on Vite. Files: `src/api.ts` (typed API calls), `src/App.tsx`
+(API health status page), `vite.config.ts` (dev proxy from `/api` to `localhost:8000`).
+Scripts: `npm run dev`, `npm run lint`, `npm run build`.
+Next: typed API client for auth and batches, login screen, batch screens.
+
+## 12. run.sh, CI and CD
 
 ### run.sh
 
@@ -175,7 +185,8 @@ File: `.github/workflows/ci.yml`. Triggers: pull requests and pushes to `main`.
 Job `api` runs on Python 3.12 with a Postgres 16 service container and executes:
 `manage.py check`, `makemigrations --check --dry-run`, `manage.py test`.
 CI uses throwaway credentials set in the workflow, never the real `.env`.
-Add a `web` job (lint, typecheck, test, build) when `apps/web` is scaffolded.
+Job `web` (Node 22) runs `npm ci`, `npm run lint` and `npm run build` (which includes the
+type check). Add a test step when Vitest is added.
 
 ### Branch protection (manual, in GitHub)
 
@@ -190,7 +201,7 @@ Plan: a `deploy.yml` workflow that runs after CI passes on `main`, SSHes to the 
 pull, install dependencies, migrate, collectstatic and a service restart. Start it as manual
 (`workflow_dispatch`) before making it automatic.
 
-## 12. Commit log
+## 13. Commit log
 
 | # | Commit | Summary |
 | --- | --- | --- |
@@ -199,3 +210,4 @@ pull, install dependencies, migrate, collectstatic and a service restart. Start 
 | 3 | docs: full README and technical documentation | Full README and Doc.md |
 | 4 | feat(accounts): custom phone-number User with owner/staff roles | User model, admin, tests |
 | 5 | ci: run.sh and GitHub Actions pipeline | run.sh, .github/workflows/ci.yml, docs/CHECKLIST.md |
+| 6 | feat(web): React + TypeScript scaffold and CI web job | apps/web, ci.yml, run.sh |

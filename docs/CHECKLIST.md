@@ -44,7 +44,7 @@ Live counts: run `./run.sh progress`
 
 | Status | Task | Owner |
 | --- | --- | --- |
-| ✗ | Vite + React + TypeScript scaffold in apps/web | |
+| ✓ | Vite + React + TypeScript scaffold in apps/web | |
 | ✗ | Typed API client | |
 | ✗ | Login screen | |
 | ✗ | Batch list and create-batch form | |

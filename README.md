@@ -38,7 +38,7 @@ n8n delivers it through the right channel and reports back.
     │   │   ├── config/     project settings and root URLs
     │   │   ├── accounts/   custom phone-number User
     │   │   └── manage.py
-    │   └── web/        React + TypeScript frontend (not started)
+    │   └── web/        React + TypeScript frontend (Vite)
     ├── infra/          deployment and n8n config (not started)
     ├── docs/           Doc.md and technical notes
     └── README.md
@@ -80,6 +80,17 @@ Requires Python 3.10+ and PostgreSQL (WSL/Ubuntu or Linux).
 
 Run the tests with `python manage.py test`.
 
+## Getting started (frontend)
+
+Requires Node 20.19+ or 22.12+.
+
+    cd apps/web
+    npm install
+    npm run dev     # http://localhost:5173
+
+In dev, Vite proxies `/api` to Django on :8000, so start the API first
+(`./run.sh api`). Other scripts: `npm run lint`, `npm run build` (includes the type check).
+
 ## Commands (run.sh)
 
 One script wraps the common tasks. Run `./run.sh help` for the list.
@@ -112,7 +123,7 @@ Phase 1 (MVP): batch tracking and stage alerts. In progress.
 - [x] Custom phone-number User with roles
 - [ ] Farms, species and stage templates, batches
 - [ ] Stage alert job and n8n webhook
-- [ ] React + TypeScript frontend
+- [x] React + TypeScript frontend scaffold (Vite, API health check page)
 - [ ] POS, harvest and stock (Phase 2)
 - [ ] WhatsApp alerts and sensors (Phases 3 and 4)
 
